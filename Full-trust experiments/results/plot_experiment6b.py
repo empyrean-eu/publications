@@ -1,9 +1,6 @@
 """
-Experiment 6b - Security Impact on Cost & Latency (with Mixed)
-Two side-by-side plots showing Rollout (app-level) only.
-Left: Latency vs Security — 3 groups: Latency-opt, Security-opt, Mixed
-Right: Cost vs Security — 3 groups: Cost-opt, Security-opt, Mixed
-Data from results_big_{latency,cost,security,mixed}.json
+Experiment 6 - Security Impact on Cost & Latency (with Mixed)
+
 """
 import matplotlib
 matplotlib.use('Agg')

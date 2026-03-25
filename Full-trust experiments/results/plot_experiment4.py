@@ -1,9 +1,7 @@
 """
 Experiment 4 - Layer Placement Stacked Bar Chart (Big Scale)
-One plot: 4 scenarios on x-axis, 2 stacked bars per scenario (Greedy, Rollout).
-Stacks: Edge / Fog / Cloud percentages.
-Data from Tables 1, 3, 4, 5 of experiment_results_big.md
 """
+
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt

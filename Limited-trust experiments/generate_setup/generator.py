@@ -2,7 +2,6 @@ import numpy as np
 import sys
 import os
 
-# Add parent directory to sys.path to allow importing 'config' from the parent folder
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from config import config_collab as cfg
@@ -20,17 +19,15 @@ def generate_trust_matrix(num_clusters: int, trust_level: int) -> np.ndarray:
     
     Symmetry is enforced by OR-ing the matrix with its transpose.
     """
-    trust = np.eye(num_clusters, dtype=int)  # diagonal = self-trust
+    trust = np.eye(num_clusters, dtype=int)
     
     if trust_level >= num_clusters - 1:
-        # Full trust
         trust = np.ones((num_clusters, num_clusters), dtype=int)
     else:
         for i in range(num_clusters):
             for k in range(1, trust_level + 1):
                 j = (i + k) % num_clusters
                 trust[i, j] = 1
-        # Enforce symmetry: if A trusts B, then B trusts A
         trust = np.maximum(trust, trust.T)
     
     return trust
@@ -48,14 +45,12 @@ def segment_nodes_into_clusters(num_nodes: int, num_clusters: int, categories: n
     clusters = np.zeros(num_nodes, dtype=int)
     
     if categories is not None:
-        # Stratified: distribute each category evenly across clusters
-        for cat in [1, 2, 3]:  # Near-Edge, Far-Edge, Cloud
+        for cat in [1, 2, 3]:
             cat_indices = np.where(categories == cat)[0]
             np.random.shuffle(cat_indices)
             for rank, node_idx in enumerate(cat_indices):
                 clusters[node_idx] = rank % num_clusters
     else:
-        # Fallback: random assignment
         node_indices = np.arange(num_nodes)
         np.random.shuffle(node_indices)
         for i in range(num_clusters):
@@ -67,7 +62,6 @@ def segment_nodes_into_clusters(num_nodes: int, num_clusters: int, categories: n
 
 
 def generate_topology(trust_level: int = 0) -> Topology:
-    # 1. Define Nodes
     cat_near_edge = np.full(cfg.NUM_NEAR_EDGE, 1)
     cat_far_edge = np.full(cfg.NUM_FAR_EDGE, 2)
     cat_cloud = np.full(cfg.NUM_CLOUD, 3)
@@ -75,13 +69,10 @@ def generate_topology(trust_level: int = 0) -> Topology:
     
     num_nodes = len(categories)
         
-    # 1A. Segment Nodes into Clusters (10 clusters)
     node_clusters = segment_nodes_into_clusters(num_nodes, cfg.NUM_CLUSTERS, categories)
     
-    # 1B. Generate Trust Matrix
     trust_matrix = generate_trust_matrix(cfg.NUM_CLUSTERS, trust_level)
     
-    # Print cluster composition
     print(f"\n[Trust Level {trust_level}] Trust matrix generated ({cfg.NUM_CLUSTERS}x{cfg.NUM_CLUSTERS})")
     for c in range(cfg.NUM_CLUSTERS):
         trusted = [j for j in range(cfg.NUM_CLUSTERS) if trust_matrix[c, j] == 1 and j != c]
@@ -90,7 +81,6 @@ def generate_topology(trust_level: int = 0) -> Topology:
         cl_count = np.sum((node_clusters == c) & (categories == 3))
         print(f"  Cluster {c}: {ne_count}NE + {fe_count}FE + {cl_count}C nodes | trusts: {trusted if trusted else 'self only'}")
         
-    # 2. Generate Network Latency Matrix (Symmetric)
     lat_matrix = np.zeros((num_nodes, num_nodes))
     
     for i in range(num_nodes):
@@ -122,7 +112,6 @@ def generate_topology(trust_level: int = 0) -> Topology:
             lat_matrix[i, j] = latency
             lat_matrix[j, i] = latency
 
-    # 3. User Latency Matrix
     user_lat = np.zeros((num_nodes, cfg.NUM_CLUSTERS))
     
     base_access_delays = np.zeros(num_nodes)
@@ -146,7 +135,6 @@ def generate_topology(trust_level: int = 0) -> Topology:
                 
             user_lat[n, c] = round(val, 2)
     
-    # 4. Generate Machines
     machines_list = []
     machine_rows = []
     
@@ -194,6 +182,7 @@ def generate_topology(trust_level: int = 0) -> Topology:
             
             sec = np.random.choice([0, 1, 2, 3], p=security_prob)
 
+            # [CPU, RAM, STO, COST, SEC, LOAD, NODE_ID, SPEED, INTRA_NODE, INTRA_MACH]
             machine_rows.append([cpu, 999999.0, 999999.0, cost, sec, 0, n_id, mach_speed, cfg.INTRA_NODE_LATENCY, cfg.INTRA_MACHINE_LATENCY])
             
     machines = np.array(machine_rows)
@@ -214,7 +203,6 @@ def generate_topology(trust_level: int = 0) -> Topology:
 def generate_workload(num_apps=cfg.NUM_APPS) -> list[Application]:
     """
     Generate workload with apps evenly distributed across clusters.
-    10 apps per cluster (100 total for 10 clusters).
     """
     apps = []
     ms_counter = 0
@@ -272,7 +260,6 @@ def generate_workload(num_apps=cfg.NUM_APPS) -> list[Application]:
             services.append(ms)
             ms_counter += 1
             
-        # mTLS
         mtls_reqs = []
         for _ in range(num_ms - 1):
             req = (np.random.random() < cfg.MTLS_PROBABILITY)
@@ -280,7 +267,6 @@ def generate_workload(num_apps=cfg.NUM_APPS) -> list[Application]:
             
         return_path = (np.random.random() < cfg.RETURN_PATH_PROBABILITY)
 
-        # Assign cluster: evenly distribute (app i -> cluster i // apps_per_cluster)
         source_cluster = i // apps_per_cluster
         if source_cluster >= cfg.NUM_CLUSTERS:
             source_cluster = cfg.NUM_CLUSTERS - 1
@@ -296,7 +282,6 @@ def generate_workload(num_apps=cfg.NUM_APPS) -> list[Application]:
         )
         apps.append(app)
     
-    # Print distribution
     cluster_counts = {}
     for a in apps:
         cluster_counts[a.source_cluster] = cluster_counts.get(a.source_cluster, 0) + 1
@@ -308,7 +293,7 @@ if __name__ == "__main__":
     import time
     print("=== Creating Experimental Setup (Limited-trust) ===")
     print("1. Generating Infrastructure Topology & Trust Matrix...")
-    trust_level = 3  # Example trust level for setup visualization
+    trust_level = 3
     topo = generate_topology(trust_level=trust_level)
     print(f"   -> Topolopy generated: {topo.num_nodes} nodes, {len(topo.machines)} total machines.")
     print(f"   -> Distribution: {len(np.where(topo.node_categories == 1)[0])} Edge, {len(np.where(topo.node_categories == 2)[0])} Fog, {len(np.where(topo.node_categories == 3)[0])} Cloud nodes.")

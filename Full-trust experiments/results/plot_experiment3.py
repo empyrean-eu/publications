@@ -1,8 +1,5 @@
 """
 Experiment 3 - Normalized Metrics Comparison (Big Scale)
-4 subplots, one per optimization scenario.
-Each subplot: 2 groups (Greedy, Rollout) x 3 bars (Cost, Latency, Security).
-Data from Tables 1, 3, 4, 5 of experiment_results_big.md
 """
 import matplotlib
 matplotlib.use('Agg')

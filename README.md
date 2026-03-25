@@ -13,6 +13,8 @@ The repository is organised into folders corresponding to the experimental secti
 - **[`Full-trust experiments/`](Full-trust%20experiments/)**: Contains the setup and results for sections 6.2.1. and 6.2.2. evaluating fully collaborative (full-trust) orchestrator associations.
 - **[`Limited-trust experiments/`](Limited-trust%20experiments/)**: Contains the setup and results for the section 6.2.3. evaluating multi-tenant inter-cluster trust (limited-trust) associations.
 
+**Note**: In the code, the notation for near-edge and far-edge is simply edge and fog, respectively.
+
 ### Reproducing the experimental setup and the results
 
 Inside each of the experimental folders, you will find:

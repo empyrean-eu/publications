@@ -1,8 +1,5 @@
 """
-Experiment 5b - Tier Distribution (stacked) + mTLS Activation (thin bar)
-4 scenarios on x-axis (including Mixed), Rollout only.
-Each scenario: wide stacked bar (tiers) + thin bar (mTLS %).
-Data from results_big_{cost,latency,security,mixed}.json
+Experiment 5 - Tier Distribution (stacked) + mTLS Activation (thin bar)
 """
 import matplotlib
 matplotlib.use('Agg')

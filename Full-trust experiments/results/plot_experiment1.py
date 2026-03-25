@@ -1,14 +1,13 @@
 """
 Experiment 1 - Optimality Gap Bar Chart
 Compares Greedy Best-Fit vs Best Rollout optimality gap relative to ILP.
-Data from Tables 2, 4, 5, 6 of experiment_results.md
 """
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import numpy as np
 
-# --- Data ---
+
 scenarios = ['Cost', 'Latency', 'Security', 'Balanced']
 
 # Objective scores from tables

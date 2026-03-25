@@ -2,16 +2,15 @@
 
 # --- Simulation Parameters ---
 SEED = 42
-RUN_ILP = True
-RUN_ROLLOUT = True # Toggle Rollout execution
-RUN_ROLLOUT_NODE_BASED = False # Toggle simplified Node-Based Rollout
-RUN_ROLLOUT_NODE_PARALLEL = False # Toggle parallel Node-Based Rollout
-RUN_FULL_ROLLOUT = True # Toggle Full Lookahead Rollout (inter-app, parallel)
-USE_CP_SAT = True # Use Google OR-Tools CP-SAT (ILP2) instead of PuLP (ILP)
-ILP_MAX_CANDIDATES = 50
+# RUN_ILP = True
+# RUN_ROLLOUT = True # Toggle Rollout execution
+# RUN_ROLLOUT_NODE_BASED = False # Toggle simplified Node-Based Rollout
+# RUN_ROLLOUT_NODE_PARALLEL = False # Toggle parallel Node-Based Rollout
+# RUN_FULL_ROLLOUT = True # Toggle Full Lookahead Rollout (inter-app, parallel)
+# USE_CP_SAT = True # Use Google OR-Tools CP-SAT (ILP2) instead of PuLP (ILP)
+# ILP_MAX_CANDIDATES = 50
 
 
-# --- Topology Constants ---
 # Specific Topology: 50 Edge, 20 Fog, 5 Cloud
 NUM_EDGE = 15
 NUM_FOG = 5
@@ -27,40 +26,34 @@ MACHINES_EDGE = (1, 2)
 MACHINES_FOG = (2, 2)
 MACHINES_CLOUD = (4, 4)
 
-# Node Categories
-# 1: Edge, 2: Fog, 3: Cloud
 
-# --- Machine Performance Coefficients ---
 # Exec Time = Typical Runtime / Speed Coefficient
-# User Request: Stochastic Speed Ranges
+
 SPEED_COEFF_EDGE = (0.5, 0.8)
 SPEED_COEFF_FOG = (1.0, 1.2)
 SPEED_COEFF_CLOUD = (1.4, 2.0)
 
-# Machine Specifications (CPU, RAM, STO, COST)
-# Edge (Premium Scarcity)
+# Machine Specifications (CPU, COST)
+
 SPECS_EDGE_CPU = (1.0, 4.0)
-# SPECS_EDGE_RAM = (2.0, 8.0)
-# SPECS_EDGE_STO = (10.0, 50.0)
+
 SPECS_EDGE_COST = (3.0, 5.0)
 
 # Fog (Mid)
 SPECS_FOG_CPU = (2.0, 8.0)
-# SPECS_FOG_RAM = (8.0, 32.0)
-# SPECS_FOG_STO = (50.0, 200.0)
+
 SPECS_FOG_COST = (2.0, 3.0)
 
 # Cloud (Economy of Scale)
 SPECS_CLOUD_CPU = (4.0, 16.0)
-# SPECS_CLOUD_RAM = (32.0, 128.0)
-# SPECS_CLOUD_STO = (200.0, 1000.0)
+
 SPECS_CLOUD_COST = (1.0, 2.0)
 
 # --- Latency Constants (ms) ---
-INTRA_MACHINE_LATENCY = 2.0       # User Ref: "Inter-machine delay"
-INTRA_NODE_LATENCY = 5.0          # User Ref: "Inter-node delay" (Machines in same node)
+INTRA_MACHINE_LATENCY = 2.0      
+INTRA_NODE_LATENCY = 5.0         
 
-# --- Networking ---
+
 # Network latencies (ms) ranges by tier pair
 DELAY_EDGE_EDGE = (20.0, 40.0)
 DELAY_EDGE_FOG = (60.0, 150.0)
@@ -79,27 +72,25 @@ NUM_APPS = 15
 MIN_SERVICES = 2
 MAX_SERVICES = 10
 
-# --- Return Path ---
-RETURN_PATH_PROBABILITY = 0.25
+# # --- Return Path ---
+# RETURN_PATH_PROBABILITY = 0.25
 
 # --- Service Generation Parameters ---
 
 # 1. Runtime (ms)
-# Bimodal Distribution: Light (Network Bound) vs Heavy (Compute Bound)
-PROB_HEAVY_SERVICE = 0.1
+
+PROB_HEAVY_SERVICE = 0.2
 RUNTIME_LIGHT = (5.0, 20.0)
 RUNTIME_HEAVY = (100.0, 200.0)
 
-# 2. Resource Demands (CPU, RAM, Storage)
+# 2. Resource Demands (CPU)
 # Light Services
 DEMAND_CPU_LIGHT = (0.2, 1.0)
-# DEMAND_RAM_LIGHT = (0.4, 1.0)
-# DEMAND_STO_LIGHT = (1.0, 5.0)
+
 
 # Heavy Services
 DEMAND_CPU_HEAVY = (1.0, 2.0)
-# DEMAND_RAM_HEAVY = (1.0, 4.0)
-# DEMAND_STO_HEAVY = (5.0, 10.0)
+
 
 # 3. Security Requirements
 MIN_SEC = 0
@@ -113,7 +104,7 @@ MTLS_PROBABILITY = 0.3
 MTLS_CPU_OVERHEAD = 0.2
 
 # mTLS Latency = Base + (Per_MB * Data_Size_MB)
-MTLS_LATENCY_FIXED = 5.0    # Base latency (handshake RTT etc.)
+MTLS_LATENCY_FIXED = 5.0    # Base latency 
 MTLS_LATENCY_PER_MB = 10.0   # Encryption/Processing delay per MB
 
 
@@ -131,8 +122,7 @@ COST_MULT_FOG = np.array([1.0, 1.1, 1.25, 1.5])
 COST_MULT_CLOUD = np.array([1.0, 1.1, 1.25, 1.5])
 
 # Node Capability Distributions (Security Tier Probabilities 0-3)
-# Ref Config:
-# EDGE: 50% T0, 20% T1, 20% T2, 10% T3
+
 PROB_EDGE = [0.40, 0.25, 0.20, 0.15]
 PROB_FOG = [0.30, 0.30, 0.20, 0.20]
 PROB_CLOUD = [0.20, 0.25, 0.25, 0.30]
@@ -146,7 +136,7 @@ MIN_NORM_COST = 10.0   # Est Min Cost
 MAX_NORM_LATENCY = 2000.0 # Est Max Total End-to-End Chain Latency
 MIN_NORM_LATENCY = 5.0
 
-MAX_NORM_SEC = 40.0 # Theoretical Max: 10 svc * 3 tier + 9 links * 1 mTLS = 39
+MAX_NORM_SEC = 40.0 # Theoretical Max: 10 svc * 3 tier + 9 links * 1 mTLS = 39 but depends on number of services 
 MIN_NORM_SEC = 1.0
 
 # --- Weights ---
@@ -155,8 +145,7 @@ W1 = 0.1 # Cost
 W2 = 0.8# Security
 W3 = 0.1# Latency
 
-# --- Heuristics ---
-MAX_WORKERS = 16 # Auto-detect in main recommended, or hardcode
-ROLLOUT_WINDOW_SIZE = 5 # Number of future apps to consider in windowed lookahead
-ROLLOUT_DISCOUNT = 0.3 # Discount factor for future app scores (0=ignore future, 1=full weight)
-FULL_ROLLOUT_TOP_K = 10 # Number of top machines to evaluate per service in Full Rollout
+# # --- Heuristics ---
+# MAX_WORKERS = 16 
+# ROLLOUT_DISCOUNT = 0.3 
+# FULL_ROLLOUT_TOP_K = 10 
