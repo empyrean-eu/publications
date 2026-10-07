@@ -5,7 +5,7 @@ import os
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from config import config_big as cfg  #Use config as cfg for small topology and config_big as cfg for expanded topology
+from config import config_big as cfg  # Use config_small as cfg for small topology and config_big as cfg for expanded topology
 from structs import Topology, Application, Microservice, dataclass
 import random
 
@@ -238,7 +238,7 @@ def generate_workload(num_apps=cfg.NUM_APPS) -> list[Application]:
             incoming_mb = services[link_idx].data_size
             mtls_ovs.append(compute_mtls_cpu_overhead(incoming_mb))
             
-        return_path = (np.random.random() < cfg.RETURN_PATH_PROBABILITY)
+        return_path = (np.random.random() < getattr(cfg, 'RETURN_PATH_PROBABILITY', 0.0))
 
         source_cluster = np.random.randint(0, cfg.NUM_CLUSTERS)
         

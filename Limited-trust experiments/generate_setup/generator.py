@@ -309,7 +309,7 @@ def generate_workload(num_apps=cfg.NUM_APPS) -> list[Application]:
             incoming_mb = services[link_idx].data_size
             mtls_ovs.append(compute_mtls_cpu_overhead(incoming_mb))
             
-        return_path = (np.random.random() < cfg.RETURN_PATH_PROBABILITY)
+        return_path = (np.random.random() < getattr(cfg, 'RETURN_PATH_PROBABILITY', 0.0))
 
         source_cluster = i // apps_per_cluster
         if source_cluster >= cfg.NUM_CLUSTERS:

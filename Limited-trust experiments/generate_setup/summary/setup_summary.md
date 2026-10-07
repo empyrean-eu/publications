@@ -29,8 +29,8 @@
 
 - **Total machines:** 255
 - **Per tier:** Near-Edge: 93 (36.5%), Far-Edge: 62 (24.3%), Cloud: 100 (39.2%)
-- **Security tier on machines:** Tier 0: 78 (30.6%), Tier 1: 69 (27.1%), Tier 2: 52 (20.4%), Tier 3: 56 (22.0%)
-- **CPU capacity (cores):** min=2.03, mean=6.05, max=15.92
+- **Security tier on machines:** Tier 0: 84 (32.9%), Tier 1: 68 (26.7%), Tier 2: 47 (18.4%), Tier 3: 56 (22.0%)
+- **CPU capacity (cores):** min=1.04, mean=9.27, max=31.81
 - **Cost rate:** min=0.95, mean=2.62, max=5.20
 - **Machines per node:** min=1, max=10, mean=2.83
 

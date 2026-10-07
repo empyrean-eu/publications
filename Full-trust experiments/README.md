@@ -7,8 +7,8 @@ This folder contains all artifacts for **experimental sections 6.2**, 6.3 and 6.
 ## Config Files
 
 | File | Topology |
-| `[config/config.py](config/config.py)` | Basic (22 nodes)
-| `[config/config_big.py](config/config_big.py)` | Extended (90 nodes)
+| `[config/config_small.py](config/config_small.py)` | Basic (22 nodes) |
+| `[config/config_big.py](config/config_big.py)` | Extended (90 nodes) |
 
 ---
 
@@ -41,7 +41,7 @@ Running the generator prints summary **tables** to the console and writes artifa
 
 ### Experiment 1 — Optimality Gap Analysis
 
-**Topology:** Basic | **Config:** `config.py`
+**Topology:** Basic | **Config:** `config_small.py`
 
 Compares the normalised objective scores of Greedy best-fit, Simulated Annealing, and the multi-agent Rollout against the optimal ILP (CP-SAT) solution across four optimisation scenarios (cost, latency, security, balanced).
 
@@ -138,6 +138,7 @@ Scalability — infrastructuremTLS sensitivity
 ## How to Reproduce the Plots
 
 ```bash
+pip install -r requirements.txt
 cd results/
 python plot_experiment1.py
 python plot_experiment3_v2.py
@@ -150,5 +151,5 @@ python plot_scalability_services_v2.py
 python plot_balanced_mtls_v2.py
 ```
 
-> Requires: `matplotlib`, `numpy`
+> Dependencies listed in `requirements.txt` (`matplotlib`, `numpy`).
 

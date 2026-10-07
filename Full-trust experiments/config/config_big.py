@@ -4,8 +4,7 @@
 SEED = 42
 # RUN_ILP = False
 # RUN_ROLLOUT = True # Toggle Rollout execution
-# USE_CP_SAT = False # Use Google OR-Tools CP-SAT (ILP2) instead of PuLP (ILP)
-# ILP_MAX_CANDIDATES = 50
+
 
 
 # Specific Topology: 60 Edge, 20 Fog, 10 Cloud
@@ -32,7 +31,7 @@ SPEED_COEFF_CLOUD = (1.4, 2.0)
 
 # Machine Specifications (CPU, COST)
 
-SPECS_EDGE_CPU = (2.0, 4.0)
+SPECS_EDGE_CPU = (1.0, 4.0)
 
 SPECS_EDGE_COST = (3.0, 5.0)
 
@@ -65,7 +64,7 @@ DELAY_USER_FOG = (100.0, 150.0)
 DELAY_USER_CLOUD = (400.0, 500.0)
 
 # --- Application Constants ---
-NUM_APPS = 60
+NUM_APPS = 100
 MIN_SERVICES = 2
 MAX_SERVICES = 10
 
@@ -103,15 +102,12 @@ MTLS_LATENCY_PER_MB = 10.0   # Encryption/Processing delay per MB
 # Unikernel (tier 3) requires a specialized image — available per service with this probability
 PROB_UNIKERNEL_IMAGE = 0.20
 
-# Return path: last service sends response back to user equipment
-RETURN_PATH_PROBABILITY = 0.25
-
 
 
 # --- Resource Overheads (Security Tiers) ---
 # Tiers: 0, 1, 2, 3
 import numpy as np
-OVERHEAD_CPU_BASE = np.array([1.0, 1.74, 1.36, 0.67])
+OVERHEAD_CPU_BASE = np.array([1.0, 1.58, 1.84, 0.67])
 # OVERHEAD_RAM = np.array([1.0, 1.23, 1.34, 0.66])
 # OVERHEAD_STORAGE = np.array([1.0, 1.23, 2.71, 0.24])
 
@@ -122,30 +118,16 @@ COST_MULT_CLOUD = np.array([1.0, 1.1, 1.25, 1.5])
 
 # Node Capability Distributions (Security Tier Probabilities 0-3)
 
-PROB_EDGE = [0.40, 0.30, 0.20, 0.10]
-PROB_FOG = [0.30, 0.20, 0.30, 0.20]
+PROB_EDGE = [0.50, 0.20, 0.20, 0.10]
+PROB_FOG = [0.30, 0.30, 0.20, 0.20]
 PROB_CLOUD = [0.20, 0.25, 0.25, 0.30]
 
-# --- Normalization Bounds (Estimated) ---
-# Used for Max-Min Normalization [0, 1]
-# We utilize these to normalize objective terms before weighting
-MAX_NORM_COST = 5000.0  # Safe upper bound for new high cost edge model
-MIN_NORM_COST = 10.0   # Est Min Cost
 
-MAX_NORM_LATENCY = 2000.0 # Est Max Total End-to-End Chain Latency
-MIN_NORM_LATENCY = 5.0
-
-MAX_NORM_SEC = 40.0 # Theoretical Max: 10 svc * 3 tier + 9 links * 1 mTLS = 39
-MIN_NORM_SEC = 1.0
 
 # --- Weights ---
 # w1*NormCost + w2*NormSec + w3*NormLat
-W1 = 0.3 # Cost
-W2 = 0.2# Security
-W3 = 0.4 # Latency
+W1 = 0.1 # Cost
+W2 = 0.8# Security
+W3 = 0.1 # Latency
 
-# # --- Heuristics ---
-# MAX_WORKERS = 16 
-# ROLLOUT_WINDOW_SIZE = 10 # Number of future apps to consider in windowed lookahead
-# ROLLOUT_DISCOUNT = 0.95 # Discount factor for future app scores (0=ignore future, 1=full weight)
 

@@ -37,13 +37,13 @@ SPEED_COEFF_FOG = (1.0, 1.2)
 SPEED_COEFF_CLOUD = (1.4, 2.0)
 
 # Machine Specifications (CPU, COST)
-SPECS_EDGE_CPU = (2.0, 4.0)
+SPECS_EDGE_CPU = (1.0, 4.0)
 SPECS_EDGE_COST = (3.0, 5.0)
 
-SPECS_FOG_CPU = (2.0, 8.0)
+SPECS_FOG_CPU = (2.0, 12.0)
 SPECS_FOG_COST = (2.0, 3.0)
 
-SPECS_CLOUD_CPU = (4.0, 16.0)
+SPECS_CLOUD_CPU = (4.0, 32.0)
 SPECS_CLOUD_COST = (1.0, 2.0)
 
 # --- Latency Constants (ms) ---
@@ -93,13 +93,11 @@ MTLS_LATENCY_PER_MB = 10.0
 # Unikernel (tier 3) requires a specialized image — available per service with this probability
 PROB_UNIKERNEL_IMAGE = 0.20
 
-# Return path: last service sends response back to user equipment
-RETURN_PATH_PROBABILITY = 0.25
 
 # --- Resource Overheads (Security Tiers) ---
 # Tiers: 0, 1, 2, 3
 import numpy as np
-OVERHEAD_CPU_BASE = np.array([1.0, 1.74, 1.36, 0.67])
+OVERHEAD_CPU_BASE = np.array([1.0, 1.58, 1.84, 0.67])
 
 
 # Cost Multipliers per Security Tier (multiplicative on base cost)
@@ -108,27 +106,12 @@ COST_MULT_FOG = np.array([1.0, 1.1, 1.25, 1.5])
 COST_MULT_CLOUD = np.array([1.0, 1.1, 1.25, 1.5])
 
 # Node Capability Distributions (Security Tier Probabilities 0-3)
-PROB_EDGE = [0.40, 0.30, 0.20, 0.10]
-PROB_FOG = [0.30, 0.20, 0.30, 0.20]
+PROB_EDGE = [0.50, 0.20, 0.20, 0.10]
+PROB_FOG = [0.30, 0.30, 0.20, 0.20]
 PROB_CLOUD = [0.20, 0.25, 0.25, 0.30]
-
-# --- Normalization Bounds (Estimated) ---
-# Used for Max-Min Normalization [0, 1]
-MAX_NORM_COST = 5000.0
-MIN_NORM_COST = 10.0
-MAX_NORM_LATENCY = 2000.0
-MIN_NORM_LATENCY = 5.0
-MAX_NORM_SEC = 40.0
-MIN_NORM_SEC = 1.0
 
 # --- Weights ---
 # w1*NormCost + w2*NormSec + w3*NormLat
 W1 = 0.35  # Cost
 W2 = 0.2   # Security
 W3 = 0.45  # Latency
-
-# # --- Heuristics ---
-# MAX_WORKERS = 16
-# ROLLOUT_WINDOW_SIZE = 10
-# ROLLOUT_DISCOUNT = 0.95
-# FULL_ROLLOUT_TOP_K = 50
